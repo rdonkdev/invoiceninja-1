@@ -76,7 +76,6 @@ use Laracasts\Presenter\PresentableTrait;
  * @property-read int|null $quote_invitations_count
  * @property-read int|null $recurring_invoice_invitations_count
  * @property-read \App\Models\User $user
- * @method static \Illuminate\Database\Eloquent\Builder|ClientContact company()
  * @method static \Database\Factories\ClientContactFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|ClientContact newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|ClientContact newQuery()
@@ -215,7 +214,7 @@ class ClientContact extends Authenticatable implements HasLocalePreference
         }
     }
 
-    public function client()
+    public function client(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Client::class)->withTrashed();
     }
@@ -225,32 +224,32 @@ class ClientContact extends Authenticatable implements HasLocalePreference
         return $this->where('is_primary', true);
     }
 
-    public function company()
+    public function company(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Company::class);
     }
 
-    public function user()
+    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(User::class)->withTrashed();
     }
 
-    public function invoice_invitations()
+    public function invoice_invitations(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(InvoiceInvitation::class);
     }
 
-    public function recurring_invoice_invitations()
+    public function recurring_invoice_invitations(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(RecurringInvoiceInvitation::class);
     }
 
-    public function quote_invitations()
+    public function quote_invitations(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(QuoteInvitation::class);
     }
 
-    public function credit_invitations()
+    public function credit_invitations(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(CreditInvitation::class);
     }

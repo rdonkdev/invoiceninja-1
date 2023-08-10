@@ -49,7 +49,7 @@ class Helpers
      * @param mixed|null $custom_fields
      * @param mixed $field
      * @param mixed $value
-     * @param \App\Models\Client|null $client
+     * @param \App\Models\Client|null $entity
      *
      * @return null|string
      */
@@ -143,7 +143,7 @@ class Helpers
      * Process reserved keywords on PDF.
      *
      * @param string $value
-     * @param Client|Company|Vendor $entity
+     * @param \App\Models\Client|\App\Models\Company|\App\Models\Vendor $entity
      * @param null|Carbon $currentDateTime
      * @return null|string
      */
@@ -177,27 +177,27 @@ class Helpers
             'literal' => [
                 ':MONTH_BEFORE' => \sprintf(
                     '%s %s %s',
-                    $currentDateTime->copy()->subMonth(1)->translatedFormat($entity->date_format()),
+                    $currentDateTime->copy()->subMonth()->translatedFormat($entity->date_format()),
                     ctrans('texts.to'),
-                    $currentDateTime->copy()->subDay(1)->translatedFormat($entity->date_format()),
+                    $currentDateTime->copy()->subDay()->translatedFormat($entity->date_format()),
                 ),
                 ':YEAR_BEFORE' => \sprintf(
                     '%s %s %s',
-                    $currentDateTime->copy()->subYear(1)->translatedFormat($entity->date_format()),
+                    $currentDateTime->copy()->subYear()->translatedFormat($entity->date_format()),
                     ctrans('texts.to'),
-                    $currentDateTime->copy()->subDay(1)->translatedFormat($entity->date_format()),
+                    $currentDateTime->copy()->subDay()->translatedFormat($entity->date_format()),
                 ),
                 ':MONTH_AFTER' => \sprintf(
                     '%s %s %s',
                     $currentDateTime->translatedFormat($entity->date_format()),
                     ctrans('texts.to'),
-                    $currentDateTime->copy()->addMonth(1)->subDay(1)->translatedFormat($entity->date_format()),
+                    $currentDateTime->copy()->addMonth()->subDay()->translatedFormat($entity->date_format()),
                 ),
                 ':YEAR_AFTER' => \sprintf(
                     '%s %s %s',
                     $currentDateTime->translatedFormat($entity->date_format()),
                     ctrans('texts.to'),
-                    $currentDateTime->copy()->addYear(1)->subDay(1)->translatedFormat($entity->date_format()),
+                    $currentDateTime->copy()->addYear()->subDay()->translatedFormat($entity->date_format()),
                 ),
                 ':MONTHYEAR' => \sprintf(
                     '%s %s',

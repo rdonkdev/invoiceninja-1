@@ -11,26 +11,27 @@
 
 namespace App\Http\Controllers\ClientPortal;
 
-use App\Events\Credit\CreditWasViewed;
-use App\Events\Invoice\InvoiceWasViewed;
-use App\Events\Misc\InvitationWasViewed;
+use App\Utils\Ninja;
+use App\Models\Client;
+use App\Models\Payment;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Models\ClientContact;
+use App\Models\QuoteInvitation;
+use App\Utils\Traits\MakesHash;
+use App\Models\CreditInvitation;
+use App\Utils\Traits\MakesDates;
+use App\Jobs\Entity\CreateRawPdf;
+use App\Models\InvoiceInvitation;
 use App\Events\Quote\QuoteWasViewed;
 use App\Http\Controllers\Controller;
-use App\Jobs\Entity\CreateRawPdf;
-use App\Models\Client;
-use App\Models\ClientContact;
-use App\Models\CreditInvitation;
-use App\Models\InvoiceInvitation;
-use App\Models\Payment;
-use App\Models\PurchaseOrderInvitation;
-use App\Models\QuoteInvitation;
-use App\Services\ClientPortal\InstantPayment;
-use App\Utils\Ninja;
-use App\Utils\Traits\MakesDates;
-use App\Utils\Traits\MakesHash;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
+use App\Events\Credit\CreditWasViewed;
+use App\Events\Contact\ContactLoggedIn;
+use App\Models\PurchaseOrderInvitation;
+use App\Events\Invoice\InvoiceWasViewed;
+use App\Events\Misc\InvitationWasViewed;
+use App\Services\ClientPortal\InstantPayment;
 
 /**
  * Class InvitationController.
@@ -94,6 +95,7 @@ class InvitationController extends Controller
         }
 
         $client_contact = $invitation->contact;
+        event(new ContactLoggedIn($client_contact, $client_contact->company, Ninja::eventVars()));
 
         if (empty($client_contact->email)) {
             $client_contact->email = Str::random(15) . "@example.com";
@@ -212,7 +214,10 @@ class InvitationController extends Controller
 
     public function paymentRouter(string $contact_key, string $payment_id)
     {
+        /** @var \App\Models\ClientContact $contact **/
         $contact = ClientContact::withTrashed()->where('contact_key', $contact_key)->firstOrFail();
+        
+        /** @var \App\Models\Payment $payment **/
         $payment = Payment::find($this->decodePrimaryKey($payment_id));
 
         if ($payment->client_id != $contact->client_id) {

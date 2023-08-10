@@ -82,6 +82,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property-read int|null $notifications_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\CompanyToken> $tokens
  * @property-read int|null $tokens_count
+ * @property \App\Models\CompanyToken $token
  * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|User filter(\App\Filters\QueryFilters $filters)
  * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
@@ -231,7 +232,7 @@ class User extends Authenticatable implements MustVerifyEmail
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function companies()
+    public function companies(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
         return $this->belongsToMany(Company::class)->using(CompanyUser::class)->withPivot('permissions', 'settings', 'is_admin', 'is_owner', 'is_locked')->withTimestamps();
     }
@@ -278,12 +279,12 @@ class User extends Authenticatable implements MustVerifyEmail
      *
      * @return \App\Models\Company $company
      */
-    public function company(): Company
+    public function company(): \App\Models\Company
     {
         return $this->getCompany();
     }
 
-    public function company_users()
+    public function company_users(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(CompanyUser::class)->withTrashed();
     }
@@ -313,8 +314,6 @@ class User extends Authenticatable implements MustVerifyEmail
 
         return $this->token()->cu;
 
-        // return $this->hasOneThrough(CompanyUser::class, CompanyToken::class, 'user_id', 'user_id', 'id', 'user_id')
-        // ->withTrashed();
     }
 
     /**
@@ -327,7 +326,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->company()->id;
     }
 
-    public function clients()
+    public function clients(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Client::class);
     }
@@ -352,7 +351,6 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return json_decode($this->token()->cu->settings);
 
-        //return json_decode($this->company_user->settings);
     }
 
     /**
@@ -364,14 +362,12 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->token()->cu->is_admin;
 
-        // return $this->company_user->is_admin;
     }
 
     public function isOwner() : bool
     {
         return $this->token()->cu->is_owner;
 
-        // return $this->company_user->is_owner;
     }
 
     /**
@@ -389,7 +385,7 @@ class User extends Authenticatable implements MustVerifyEmail
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function contacts()
+    public function contacts(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(ClientContact::class);
     }
@@ -581,12 +577,12 @@ class User extends Authenticatable implements MustVerifyEmail
         return false;
     }
 
-    public function documents()
+    public function documents(): \Illuminate\Database\Eloquent\Relations\MorphMany
     {
         return $this->morphMany(Document::class, 'documentable');
     }
 
-    public function isVerified()
+    public function isVerified(): bool
     {
         return is_null($this->email_verified_at) ? false : true;
     }

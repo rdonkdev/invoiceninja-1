@@ -2404,6 +2404,9 @@ $LANG = array(
 
     'currency_cuban_peso' => 'Cuban Peso',
     'currency_bz_dollar' => 'BZ Dollar',
+    'currency_libyan_dinar' => 'Libyan Dinar',
+    'currency_silver_troy_ounce' => 'Silver Troy Ounce',
+    'currency_gold_troy_ounce' => 'Gold Troy Ounce',
 
     'review_app_help' => 'We hope you\'re enjoying using the app.<br/>If you\'d consider :link we\'d greatly appreciate it!',
     'writing_a_review' => 'writing a review',
@@ -5140,6 +5143,19 @@ $LANG = array(
     'is_tax_exempt' => 'Tax Exempt',
     'drop_files_here' => 'Drop files here',
     'upload_files' => 'Upload Files',
+    'triangular_tax_info' => 'Intra-community triangular transaction',
+    'intracommunity_tax_info' => 'Tax-free intra-community delivery',
+    'reverse_tax_info' => 'Please note that this supply is subject to reverse charge',
+    'currency_nicaraguan_cordoba' => 'Nicaraguan Córdoba',
+    'public' => 'Public',
+    'private' => 'Private',
+    'image' => 'Image',
+    'other' => 'Other',
+    'linked_to' => 'Linked To',
+    'file_saved_in_path' => 'The file has been saved in :path',
+    'unlinked_transactions' => 'Successfully unlinked :count transactions',
+    'unlinked_transaction' => 'Successfully unlinked transaction',
+    'view_dashboard_permission' => 'Allow user to access the dashboard, data is limited to available permissions',
 );
 
 return $LANG;

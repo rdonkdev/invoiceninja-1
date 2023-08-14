@@ -15,6 +15,7 @@ namespace App\Utils\Traits\Pdf;
 use App\Exceptions\InternalPDFFailure;
 use Beganovich\Snappdf\Snappdf;
 
+
 trait PdfMaker
 {
     /**
